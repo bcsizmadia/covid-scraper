@@ -17,7 +17,7 @@ app.get('/covid', (req, res) => {
       const html = response.data
       const $ = load(html)
 
-      $('.content-inner', html).each(() => {
+      $('.content-inner', html).each(function () {
         this.cases = $(this).find('div#maincounter-wrap:nth-of-type(4) > .maincounter-number > span').text().trim()
         this.deaths = $(this).find('div#maincounter-wrap:nth-of-type(6) > .maincounter-number > span').text()
         this.date = $(this).find('.content-inner > div:nth-of-type(2)').text().slice(14, -11)
@@ -25,6 +25,33 @@ app.get('/covid', (req, res) => {
 
         res.json({
           region: "Worldwide",
+          last_updated: this.date,
+          cases: this.cases,
+          deaths: this.deaths,
+          recovered: this.recovered
+        })
+      })
+    }).catch((err) => console.error(err))
+})
+
+app.get('/covid/:country', (req, res) => {
+  const country = req.params.country
+  const newUrl = `${URL}country/${country}/`
+
+  get(newUrl)
+    .then(response => {
+      const html = response.data
+      const $ = load(html)
+
+      $('.content-inner', html).each(function () {
+        const countryName = $(this).find('.content-inner > div:nth-of-type(3) > h1').text().trim()
+        this.cases = $(this).find('div#maincounter-wrap:nth-of-type(4) > .maincounter-number > span').text().trim()
+        this.deaths = $(this).find('div#maincounter-wrap:nth-of-type(5) > .maincounter-number > span').text()
+        this.date = $(this).find('.content-inner > div:nth-of-type(2)').text().slice(14, -11)
+        this.recovered = $(this).find('div#maincounter-wrap:nth-of-type(6) > .maincounter-number > span').text()
+
+        res.json({
+          region: countryName,
           last_updated: this.date,
           cases: this.cases,
           deaths: this.deaths,
