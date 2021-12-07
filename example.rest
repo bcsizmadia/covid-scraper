@@ -1,0 +1,21 @@
+GET http://localhost:9572/covid
+
+###
+
+GET http://localhost:9572/covid/hungary
+
+###
+
+GET http://localhost:9572/covid/slovakia
+
+###
+
+GET http://localhost:9572/covid/austria
+
+###
+
+GET http://localhost:9572/covid/slovenia
+
+###
+
+GET http://localhost:9572/covid/us
