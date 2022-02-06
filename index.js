@@ -11,51 +11,53 @@ app.use(cors())
 
 const URL = 'https://www.worldometers.info/coronavirus/'
 
-app.get('/covid', (req, res) => {
+app.get('/', (req, res) => {
   get(URL)
     .then(response => {
       const html = response.data
       const $ = load(html)
 
       $('.content-inner', html).each(function () {
-        this.cases = $(this).find('div#maincounter-wrap:nth-of-type(4) > .maincounter-number > span').text().trim()
-        this.deaths = $(this).find('div#maincounter-wrap:nth-of-type(6) > .maincounter-number > span').text()
-        this.date = $(this).find('.content-inner > div:nth-of-type(2)').text().slice(14, -11)
-        this.recovered = $(this).find('div#maincounter-wrap:nth-of-type(7) > .maincounter-number > span').text()
+        let cases = $(this).find('div#maincounter-wrap:nth-of-type(4) > .maincounter-number > span').text().trim()
+        let deaths = $(this).find('div#maincounter-wrap:nth-of-type(6) > .maincounter-number > span').text()
+        let date = $(this).find('.content-inner > div:nth-of-type(2)').text().slice(14, -11)
+        let recovered = $(this).find('div#maincounter-wrap:nth-of-type(7) > .maincounter-number > span').text()
 
         res.json({
           region: "Worldwide",
-          last_updated: this.date,
-          cases: this.cases,
-          deaths: this.deaths,
-          recovered: this.recovered
+          last_updated: date,
+          cases,
+          deaths,
+          recovered
         })
       })
-    }).catch((err) => console.error(err))
+    }).catch((err) => res.json(err.message))
 })
 
-app.get('/covid/:country', (req, res) => {
+app.get('/:country', (req, res) => {
   const country = req.params.country
   const newUrl = `${URL}country/${country}/`
 
   get(newUrl)
     .then(response => {
+      if (response.request.res.responseUrl === "https://www.worldometers.info/404.shtml") res.json({message: "Failed to load county."})
+
       const html = response.data
       const $ = load(html)
 
       $('.content-inner', html).each(function () {
-        const countryName = $(this).find('.content-inner > div:nth-of-type(3) > h1').text().trim()
-        this.cases = $(this).find('div#maincounter-wrap:nth-of-type(4) > .maincounter-number > span').text().trim()
-        this.deaths = $(this).find('div#maincounter-wrap:nth-of-type(5) > .maincounter-number > span').text()
-        this.date = $(this).find('.content-inner > div:nth-of-type(2)').text().slice(14, -11)
-        this.recovered = $(this).find('div#maincounter-wrap:nth-of-type(6) > .maincounter-number > span').text()
+        let countryName = $(this).find('.content-inner > div:nth-of-type(3) > h1').text().trim()
+        let cases = $(this).find('div#maincounter-wrap:nth-of-type(4) > .maincounter-number > span').text().trim()
+        let deaths = $(this).find('div#maincounter-wrap:nth-of-type(5) > .maincounter-number > span').text()
+        let date = $(this).find('.content-inner > div:nth-of-type(2)').text().slice(14, -11)
+        let recovered = $(this).find('div#maincounter-wrap:nth-of-type(6) > .maincounter-number > span').text()
 
         res.json({
           region: countryName,
-          last_updated: this.date,
-          cases: this.cases,
-          deaths: this.deaths,
-          recovered: this.recovered
+          last_updated: date,
+          cases,
+          deaths,
+          recovered
         })
       })
     }).catch((err) => console.error(err))
