@@ -40,7 +40,7 @@ app.get('/:country', (req, res) => {
 
   get(newUrl)
     .then(response => {
-      if (response.request.res.responseUrl === "https://www.worldometers.info/404.shtml") res.json({message: "Failed to load county."})
+      if (response.request.res.responseUrl === "https://www.worldometers.info/404.shtml") res.json({message: "Failed to load country."})
 
       const html = response.data
       const $ = load(html)
