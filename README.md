@@ -9,13 +9,13 @@
 ## Install node modules
 
 ```bash
-yarn
+npm install
 ```
 
 ## Start the application
 
 ```bash
-yarn start
+npm run start
 ```
 
 ## Endpoints
