@@ -2,7 +2,7 @@
 
 <div align="center">
     <a href="https://rapidapi.com/bcsizmadia/api/covid-data5" target="_blank">
-        <img src="https://i.imgur.com/Dv9QeMM.png" width="215" alt="Connect on RapidAPI">
+        <img src="https://storage.googleapis.com/rapidapi-documentation/connect-on-rapidapi-dark.png" width="215" alt="Connect on RapidAPI">
     </a>
 </div>
 
